@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Salina Retreat</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --parchment: #f2e8c9;
+    --parchment-dark: #e0cc9a;
+    --parchment-mid: #ede0b5;
+    --ink: #2b1d0e;
+    --ink-faded: #5c4427;
+    --leather: #7a3b1e;
+    --leather-dark: #4e2209;
+    --stamp-red: #8b1a1a;
+    --stamp-blue: #1a3a5c;
+    --gold: #c9922a;
+    --gold-light: #e8b84b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Crimson Text', Georgia, serif;
+    background: var(--parchment-dark);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+
+  /* ══════════════════════════════
+     COVER PAGE
+  ══════════════════════════════ */
+  #cover {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background:
+      linear-gradient(to bottom, rgba(43,29,14,0.55) 0%, rgba(43,29,14,0.2) 40%, rgba(43,29,14,0.75) 100%),
+      var(--parchment-dark);
+  }
+
+  /* Photo placeholder - swap src for real photo */
+  .cover-photo {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(160deg, #3b2409 0%, #6b4220 35%, #8b6030 60%, #3b2409 100%);
+    z-index: 0;
+  }
+
+  /* If a real photo is used, this class overrides the bg */
+  .cover-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.75;
+  }
+
+  /* Decorative border frame */
+  .cover-frame {
+    position: absolute;
+    inset: 20px;
+    border: 1.5px solid rgba(201, 146, 42, 0.45);
+    pointer-events: none;
+    z-index: 2;
+  }
+  .cover-frame::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border: 0.5px solid rgba(201, 146, 42, 0.25);
+  }
+
+  /* Corner ornaments */
+  .corner {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    z-index: 3;
+  }
+  .corner svg { width: 28px; height: 28px; }
+  .corner-tl { top: 14px; left: 14px; }
+  .corner-tr { top: 14px; right: 14px; transform: scaleX(-1); }
+  .corner-bl { bottom: 14px; left: 14px; transform: scaleY(-1); }
+  .corner-br { bottom: 14px; right: 14px; transform: scale(-1); }
+
+  .cover-content {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    padding: 2rem;
+    animation: fadeUp 1.2s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .cover-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    color: var(--gold-light);
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+    opacity: 0.9;
+  }
+
+  .cover-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    color: var(--parchment);
+    line-height: 1.1;
+    text-shadow: 0 2px 32px rgba(43,29,14,0.8), 0 0 2px rgba(43,29,14,0.5);
+    letter-spacing: 0.02em;
+    margin-bottom: 0.5rem;
+  }
+
+  .cover-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 1.25rem auto;
+    max-width: 360px;
+  }
+  .cover-divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+  }
+  .cover-divider-diamond {
+    width: 8px;
+    height: 8px;
+    background: var(--gold);
+    transform: rotate(45deg);
+  }
+
+  .cover-tagline {
+    font-family: 'Crimson Text', serif;
+    font-style: italic;
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    color: var(--parchment-mid);
+    letter-spacing: 0.04em;
+    margin-bottom: 2.5rem;
+    opacity: 0.9;
+  }
+
+  .cover-cta {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: var(--gold-light);
+    border: none;
+    padding: 14px 40px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    clip-path: polygon(8px 0%, calc(100% - 8px) 0%, 100% 50%, calc(100% - 8px) 100%, 8px 100%, 0% 50%);
+  }
+  .cover-cta:hover {
+    background: var(--parchment);
+    transform: scale(1.04);
+    box-shadow: 0 0 24px rgba(201,146,42,0.4);
+  }
+
+  .cover-scroll-hint {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    opacity: 0.5;
+    animation: pulse 2.5s ease-in-out infinite;
+  }
+  .cover-scroll-hint span {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: var(--parchment);
+    text-transform: uppercase;
+  }
+  .cover-scroll-hint svg { color: var(--gold); }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; transform: translateX(-50%) translateY(0); }
+    50% { opacity: 0.7; transform: translateX(-50%) translateY(4px); }
+  }
+
+  /* ══════════════════════════════
+     BOOKING PAGE
+  ══════════════════════════════ */
+  #booking {
+    display: none;
+    min-height: 100vh;
+    background:
+      radial-gradient(ellipse at top, #d4bc8a 0%, #c9a85c 40%, #b8922a 100%);
+    padding: 0 0 4rem;
+  }
+  #booking.visible { display: block; }
+
+  .booking-header {
+    background: var(--leather-dark);
+    padding: 1.25rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid var(--gold);
+  }
+  .booking-header-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.3rem;
+    color: var(--parchment);
+    letter-spacing: 0.05em;
+  }
+  .back-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    background: none;
+    border: 1px solid rgba(201,146,42,0.4);
+    padding: 6px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .back-btn:hover { background: rgba(201,146,42,0.1); }
+
+  .booking-body {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem;
+  }
+
+  /* Journal card */
+  .journal-card {
+    background: var(--parchment);
+    border: 1px solid var(--parchment-dark);
+    box-shadow: 4px 4px 0 #1a3a5c, 8px 8px 0 rgba(15,37,64,0.25);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Left binding strip */
+  .journal-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 18px;
+    background: repeating-linear-gradient(
+      to bottom,
+      #1a3a5c 0px,
+      #1a3a5c 14px,
+      #0f2540 14px,
+      #0f2540 16px
+    );
+  }
+
+  .journal-inner {
+    padding: 2rem 2rem 2rem 2.5rem;
+  }
+
+  /* Faint lined-paper lines — 28px line height, offset 16px so first line falls under the first text row */
+  .journal-lines {
+    position: absolute;
+    inset: 0;
+    left: 18px;
+    pointer-events: none;
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 43px,
+      rgba(139,109,56,0.13) 43px,
+      rgba(139,109,56,0.13) 44px
+    );
+    background-position: 0 16px;
+  }
+
+  .section-stamp {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stamp-red);
+    border: 1.5px solid var(--stamp-red);
+    padding: 3px 10px;
+    opacity: 0.8;
+    margin-bottom: 0.75rem;
+    transform: rotate(-1deg);
+  }
+
+  h2.journal-heading {
+    font-family: 'Cinzel', serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 1.25rem;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--parchment-dark);
+    padding-bottom: 0.5rem;
+  }
+
+  /* ── CALENDAR ── */
+  .cal-wrapper { position: relative; }
+
+  .cal-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  .cal-nav-btn {
+    background: none;
+    border: 1px solid var(--parchment-dark);
+    color: var(--ink-faded);
+    width: 32px; height: 32px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .cal-nav-btn:hover { background: var(--parchment-dark); color: var(--ink); }
+  .cal-month-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    color: var(--ink);
+    letter-spacing: 0.08em;
+  }
+
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
+  }
+  .cal-dow {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-align: center;
+    padding: 6px 0;
+    color: var(--ink-faded);
+    text-transform: uppercase;
+  }
+  .cal-cell {
+    aspect-ratio: 1;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem;
+    font-family: 'Crimson Text', serif;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.12s;
+    position: relative;
+    color: var(--ink);
+    user-select: none;
+  }
+  .cal-cell:hover:not(.booked):not(.past):not(.empty) {
+    background: var(--parchment-dark);
+    border-color: var(--gold);
+  }
+  .cal-cell.empty { cursor: default; }
+  .cal-cell.past { color: rgba(43,29,14,0.3); cursor: not-allowed; }
+  .cal-cell.booked {
+    background: repeating-linear-gradient(
+      45deg,
+      rgba(139,26,26,0.08) 0px,
+      rgba(139,26,26,0.08) 4px,
+      transparent 4px,
+      transparent 8px
+    );
+    color: rgba(43,29,14,0.35);
+    cursor: not-allowed;
+  }
+  .cal-cell.booked::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border: 1px solid rgba(139,26,26,0.25);
+  }
+  .cal-cell.selected-start,
+  .cal-cell.selected-end {
+    background: var(--leather);
+    color: var(--parchment);
+    border-color: var(--leather-dark);
+    font-weight: 600;
+    z-index: 1;
+  }
+  .cal-cell.in-range {
+    background: rgba(122,59,30,0.15);
+    border-color: rgba(122,59,30,0.2);
+  }
+  .cal-cell.today::before {
+    content: '';
+    position: absolute;
+    bottom: 3px; left: 50%; transform: translateX(-50%);
+    width: 4px; height: 4px;
+    background: var(--gold);
+    border-radius: 50%;
+  }
+
+  /* Legend */
+  .cal-legend {
+    display: flex;
+    gap: 1.25rem;
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: var(--ink-faded);
+    font-style: italic;
+  }
+  .legend-swatch {
+    width: 14px; height: 14px;
+    border: 1px solid rgba(43,29,14,0.2);
+  }
+
+  /* ── BOOKING FORM ── */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .form-group { display: flex; flex-direction: column; gap: 5px; }
+  .form-group.full { grid-column: 1 / -1; }
+  .form-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+  }
+  .form-input, .form-select, .form-textarea {
+    font-family: 'Crimson Text', serif;
+    font-size: 1rem;
+    color: var(--ink);
+    background: rgba(255,255,255,0.45);
+    border: none;
+    border-bottom: 1.5px solid var(--parchment-dark);
+    padding: 6px 4px;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-bottom-color: var(--leather);
+    background: rgba(255,255,255,0.6);
+  }
+  .form-textarea { resize: vertical; min-height: 60px; }
+
+  .date-chips {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1.25rem;
+  }
+  .date-chip {
+    flex: 1;
+    border: 1px dashed var(--parchment-dark);
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.3);
+  }
+  .date-chip-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faded);
+    margin-bottom: 3px;
+  }
+  .date-chip-value {
+    font-size: 1rem;
+    color: var(--leather);
+    font-style: italic;
+    min-height: 1.2em;
+  }
+
+  .duration-badge {
+    background: var(--leather);
+    color: var(--parchment);
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .duration-badge.visible { opacity: 1; }
+
+  .submit-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--parchment);
+    background: var(--leather-dark);
+    border: none;
+    padding: 14px 36px;
+    cursor: pointer;
+    transition: all 0.2s;
+    clip-path: polygon(8px 0%, calc(100% - 8px) 0%, 100% 50%, calc(100% - 8px) 100%, 8px 100%, 0% 50%);
+    width: 100%;
+    margin-top: 1rem;
+  }
+  .submit-btn:hover { background: var(--leather); transform: scale(1.01); }
+  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  /* ── SUCCESS / CONFIRMATION ── */
+  #confirmation {
+    display: none;
+    animation: fadeUp 0.6s ease both;
+  }
+  #confirmation.visible { display: block; }
+
+  .confirm-card {
+    background: var(--parchment);
+    border: 1px solid var(--parchment-dark);
+    box-shadow: 4px 4px 0 #1a3a5c, 8px 8px 0 rgba(15,37,64,0.25);
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 3rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .confirm-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 18px;
+    background: repeating-linear-gradient(
+      to bottom,
+      #1a3a5c 0px, #1a3a5c 14px,
+      #0f2540 14px, #0f2540 16px
+    );
+  }
+  .confirm-card-inner { padding-left: 0.5rem; }
+
+  .confirm-stamp {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--stamp-blue);
+    border: 4px solid var(--stamp-blue);
+    padding: 12px 24px;
+    transform: rotate(-3deg);
+    opacity: 0.85;
+    margin-bottom: 1.5rem;
+  }
+  .confirm-heading {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.5rem;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
+  }
+  .confirm-text {
+    font-size: 1.05rem;
+    font-style: italic;
+    color: var(--ink-faded);
+    max-width: 380px;
+    margin: 0 auto 1.5rem;
+    line-height: 1.6;
+  }
+  .confirm-details {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--leather);
+    text-transform: uppercase;
+    line-height: 2;
+    border-top: 1px solid var(--parchment-dark);
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+  }
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--parchment-dark);
+    margin: 1.5rem 0;
+  }
+
+  /* Loading state */
+  .loading-overlay {
+    position: fixed; inset: 0;
+    background: rgba(43,29,14,0.85);
+    z-index: 999;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 1rem;
+    display: none;
+  }
+  .loading-overlay.visible { display: flex; }
+  .loading-text {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.25em;
+    color: var(--gold-light);
+    text-transform: uppercase;
+    animation: pulse 1.5s ease infinite;
+  }
+  .loading-spinner {
+    width: 36px; height: 36px;
+    border: 2px solid rgba(201,146,42,0.3);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media (max-width: 580px) {
+    .two-col { grid-template-columns: 1fr; }
+    .form-grid { grid-template-columns: 1fr; }
+    .form-group.full { grid-column: 1; }
+    .cover-title { font-size: 2.4rem; }
+    .booking-header { flex-direction: column; gap: 0.75rem; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Loading overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-spinner"></div>
+  <p class="loading-text">Checking the expedition log...</p>
+</div>
+
+<!-- ══ COVER PAGE ══ -->
+<section id="cover">
+  <div class="cover-photo">
+    <!-- Replace this div with: <img src="YOUR_PHOTO.jpg" alt="Salina Retreat" /> -->
+  </div>
+
+  <!-- Decorative frame -->
+  <div class="cover-frame"></div>
+
+  <!-- Corner ornaments -->
+  <div class="corner corner-tl">
+    <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 2 L26 2 L26 6 M2 2 L2 26 L6 26" stroke="rgba(201,146,42,0.7)" stroke-width="1.5"/>
+      <circle cx="2" cy="2" r="2" fill="rgba(201,146,42,0.7)"/>
+    </svg>
+  </div>
+  <div class="corner corner-tr">
+    <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 2 L26 2 L26 6 M2 2 L2 26 L6 26" stroke="rgba(201,146,42,0.7)" stroke-width="1.5"/>
+      <circle cx="2" cy="2" r="2" fill="rgba(201,146,42,0.7)"/>
+    </svg>
+  </div>
+  <div class="corner corner-bl">
+    <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 2 L26 2 L26 6 M2 2 L2 26 L6 26" stroke="rgba(201,146,42,0.7)" stroke-width="1.5"/>
+      <circle cx="2" cy="2" r="2" fill="rgba(201,146,42,0.7)"/>
+    </svg>
+  </div>
+  <div class="corner corner-br">
+    <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 2 L26 2 L26 6 M2 2 L2 26 L6 26" stroke="rgba(201,146,42,0.7)" stroke-width="1.5"/>
+      <circle cx="2" cy="2" r="2" fill="rgba(201,146,42,0.7)"/>
+    </svg>
+  </div>
+
+  <div class="cover-content">
+    <p class="cover-eyebrow">Open to the Adventurous</p>
+    <h1 class="cover-title">Salina<br/>Retreat</h1>
+    <div class="cover-divider">
+      <div class="cover-divider-line"></div>
+      <div class="cover-divider-diamond"></div>
+      <div class="cover-divider-line"></div>
+    </div>
+    <p class="cover-tagline">Your basecamp for rest, family, and a good story.</p>
+    <button class="cover-cta" onclick="showBooking()">Book Your Stay</button>
+  </div>
+
+  <div class="cover-scroll-hint">
+    <span>Book Now</span>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M12 5v14M5 12l7 7 7-7"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ══ BOOKING PAGE ══ -->
+<section id="booking">
+  <div class="booking-header">
+    <span class="booking-header-title">Salina Retreat</span>
+    <button class="back-btn" onclick="showCover()">← Back</button>
+  </div>
+
+  <div class="booking-body">
+
+    <!-- CONFIRMATION (hidden until booked) -->
+    <div id="confirmation">
+      <div class="confirm-card">
+        <div class="confirm-card-inner">
+          <div class="confirm-stamp">Confirmed</div>
+          <h2 class="confirm-heading">You're all set, Explorer.</h2>
+          <p class="confirm-text" id="confirmText">Your stay has been logged in the expedition journal. Safe travels!</p>
+          <div class="confirm-details" id="confirmDetails"></div>
+          <br/>
+          <button class="back-btn" style="margin-top:1rem;" onclick="resetBooking()">Book another stay</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOOKING FORM (main UI) -->
+    <div id="bookingForm">
+      <div class="journal-card">
+        <div class="journal-lines"></div>
+        <div class="journal-inner">
+
+          <div class="two-col">
+
+            <!-- LEFT: Calendar -->
+            <div class="cal-wrapper">
+              <div class="section-stamp">Expedition Dates</div>
+              <h2 class="journal-heading">When is your next adventure?</h2>
+
+              <div class="cal-nav">
+                <button class="cal-nav-btn" id="prevMonth">&#8249;</button>
+                <span class="cal-month-label" id="monthLabel"></span>
+                <button class="cal-nav-btn" id="nextMonth">&#8250;</button>
+              </div>
+
+              <div class="cal-grid" id="calGrid">
+                <div class="cal-dow">Su</div>
+                <div class="cal-dow">Mo</div>
+                <div class="cal-dow">Tu</div>
+                <div class="cal-dow">We</div>
+                <div class="cal-dow">Th</div>
+                <div class="cal-dow">Fr</div>
+                <div class="cal-dow">Sa</div>
+              </div>
+
+              <div class="cal-legend" style="margin-top:0.85rem;">
+                <div class="legend-item">
+                  <div class="legend-swatch" style="background:var(--leather);"></div>
+                  Your dates
+                </div>
+                <div class="legend-item">
+                  <div class="legend-swatch" style="background:repeating-linear-gradient(45deg,rgba(139,26,26,0.12) 0,rgba(139,26,26,0.12) 4px,transparent 4px,transparent 8px);border-color:rgba(139,26,26,0.3);"></div>
+                  Already booked
+                </div>
+              </div>
+            </div>
+
+            <!-- RIGHT: Form -->
+            <div>
+              <div class="section-stamp">Expedition Log</div>
+              <h2 class="journal-heading">Tell us about your crew</h2>
+
+              <div class="date-chips">
+                <div class="date-chip">
+                  <div class="date-chip-label">Arriving</div>
+                  <div class="date-chip-value" id="arrivalDisplay">Pick a start date</div>
+                </div>
+                <div class="date-chip">
+                  <div class="date-chip-label">Departing</div>
+                  <div class="date-chip-value" id="departDisplay">Pick an end date</div>
+                </div>
+              </div>
+              <div class="duration-badge" id="durationBadge"></div>
+
+              <div class="form-grid">
+                <div class="form-group full">
+                  <label class="form-label" for="fname">Your name</label>
+                  <input class="form-input" id="fname" type="text" placeholder="e.g. Henry Jones Jr." autocomplete="name" />
+                </div>
+                <div class="form-group full">
+                  <label class="form-label" for="femail">Email address</label>
+                  <input class="form-input" id="femail" type="email" placeholder="for your confirmation" autocomplete="email" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="fadults">Adults</label>
+                  <input class="form-input" id="fadults" type="number" min="1" max="20" value="2" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="fkids">Kids</label>
+                  <input class="form-input" id="fkids" type="number" min="0" max="20" value="0" />
+                </div>
+                <div class="form-group full">
+                  <label class="form-label" for="fnotes">Notes for the crew (optional)</label>
+                  <textarea class="form-textarea" id="fnotes" placeholder="Anything we should know? Bringing a dog, celebrating something special..."></textarea>
+                </div>
+              </div>
+
+              <button class="submit-btn" id="submitBtn" onclick="submitBooking()" disabled>
+                Book Your Adventure →
+              </button>
+              <p style="font-size:0.8rem;color:var(--ink-faded);font-style:italic;margin-top:0.6rem;text-align:center;">
+                Select your dates on the calendar to unlock this button.
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// CONFIG — swap in your real Calendar ID and Apps Script URL
+// ═══════════════════════════════════════════════════════
+const CALENDAR_ID = 'cf97f0dd6d80aa36a7aedadc84bac47c15a5c4f8b3b24a5453663966ffc18409@group.calendar.google.com';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzdqlsZmoP6hQJJGqMFQwpvzw3G2FfF9G9gqjvV_eh4JkvltUsZCVdC36xEAZnPWQaL/exec';
+
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+let viewDate = new Date();
+let startDate = null;
+let endDate   = null;
+let bookedRanges = []; // [{start: Date, end: Date}]
+let selecting = 'start'; // 'start' | 'end'
+
+// ═══════════════════════════════════════════════════════
+// PAGE TRANSITIONS
+// ═══════════════════════════════════════════════════════
+function showBooking() {
+  document.getElementById('cover').style.display = 'none';
+  document.getElementById('booking').classList.add('visible');
+  initCalendar();
+  fetchBookedDates();
+  window.scrollTo(0,0);
+}
+function showCover() {
+  document.getElementById('booking').classList.remove('visible');
+  document.getElementById('cover').style.display = '';
+  window.scrollTo(0,0);
+}
+function resetBooking() {
+  startDate = null; endDate = null; selecting = 'start';
+  document.getElementById('confirmation').classList.remove('visible');
+  document.getElementById('confirmation').style.display = 'none';
+  document.getElementById('bookingForm').style.display = '';
+  document.getElementById('arrivalDisplay').textContent = 'Pick a start date';
+  document.getElementById('departDisplay').textContent = 'Pick an end date';
+  document.getElementById('durationBadge').classList.remove('visible');
+  document.getElementById('submitBtn').disabled = true;
+  document.getElementById('fname').value = '';
+  document.getElementById('femail').value = '';
+  document.getElementById('fadults').value = 2;
+  document.getElementById('fkids').value = 0;
+  document.getElementById('fnotes').value = '';
+  renderCal();
+}
+
+// ═══════════════════════════════════════════════════════
+// CALENDAR
+// ═══════════════════════════════════════════════════════
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+function initCalendar() {
+  viewDate = new Date();
+  viewDate.setDate(1);
+  document.getElementById('prevMonth').addEventListener('click', () => { viewDate.setMonth(viewDate.getMonth()-1); renderCal(); });
+  document.getElementById('nextMonth').addEventListener('click', () => { viewDate.setMonth(viewDate.getMonth()+1); renderCal(); });
+  renderCal();
+}
+
+function renderCal() {
+  const grid = document.getElementById('calGrid');
+  // Clear day cells (keep headers = first 7 children)
+  while(grid.children.length > 7) grid.removeChild(grid.lastChild);
+
+  document.getElementById('monthLabel').textContent = MONTHS[viewDate.getMonth()] + ' ' + viewDate.getFullYear();
+
+  const year  = viewDate.getFullYear();
+  const month = viewDate.getMonth();
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month+1, 0).getDate();
+  const today = new Date(); today.setHours(0,0,0,0);
+
+  // Empty cells
+  for(let i = 0; i < firstDay; i++) {
+    const el = document.createElement('div');
+    el.className = 'cal-cell empty';
+    grid.appendChild(el);
+  }
+
+  for(let d = 1; d <= daysInMonth; d++) {
+    const date = new Date(year, month, d);
+    const el = document.createElement('div');
+    el.className = 'cal-cell';
+    el.textContent = d;
+
+    const isPast   = date < today;
+    const isBooked = isDateBooked(date);
+    const isToday  = date.getTime() === today.getTime();
+    const isStart  = startDate && date.getTime() === startDate.getTime();
+    const isEnd    = endDate   && date.getTime() === endDate.getTime();
+    const inRange  = startDate && endDate && date > startDate && date < endDate;
+
+    if(isPast)   el.classList.add('past');
+    if(isBooked) el.classList.add('booked');
+    if(isToday)  el.classList.add('today');
+    if(isStart)  el.classList.add('selected-start');
+    if(isEnd)    el.classList.add('selected-end');
+    if(inRange)  el.classList.add('in-range');
+
+    if(!isPast && !isBooked) {
+      el.addEventListener('click', () => handleDayClick(date));
+    }
+
+    grid.appendChild(el);
+  }
+}
+
+function handleDayClick(date) {
+  if(selecting === 'start') {
+    startDate = date;
+    endDate   = null;
+    selecting = 'end';
+  } else {
+    if(date <= startDate) {
+      startDate = date;
+      endDate   = null;
+      selecting = 'end';
+    } else {
+      // Check no booked dates in range
+      if(rangeHasBooking(startDate, date)) {
+        alert('Those dates overlap with an existing reservation. Please choose different dates!');
+        return;
+      }
+      endDate   = date;
+      selecting = 'start';
+    }
+  }
+  updateDateDisplay();
+  renderCal();
+}
+
+function rangeHasBooking(s, e) {
+  return bookedRanges.some(r => s < r.end && e > r.start);
+}
+
+function isDateBooked(date) {
+  return bookedRanges.some(r => date >= r.start && date < r.end);
+}
+
+function updateDateDisplay() {
+  const fmt = d => d ? d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : null;
+  document.getElementById('arrivalDisplay').textContent  = startDate ? fmt(startDate) : 'Pick a start date';
+  document.getElementById('departDisplay').textContent   = endDate   ? fmt(endDate)   : 'Pick an end date';
+
+  const badge = document.getElementById('durationBadge');
+  if(startDate && endDate) {
+    const nights = Math.round((endDate - startDate) / 86400000);
+    badge.textContent = nights + ' night' + (nights !== 1 ? 's' : '');
+    badge.classList.add('visible');
+    document.getElementById('submitBtn').disabled = false;
+  } else {
+    badge.classList.remove('visible');
+    document.getElementById('submitBtn').disabled = true;
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// GOOGLE CALENDAR — fetch booked dates
+// ═══════════════════════════════════════════════════════
+async function fetchBookedDates() {
+  // NOTE: This requires the calendar to be PUBLIC and
+  // a Google Calendar API key added below.
+  // OR use Apps Script as a proxy (recommended for private calendars).
+  // For now we use Apps Script as the proxy.
+
+  if(APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_URL_HERE') return; // skip until configured
+
+  try {
+    const res  = await fetch(APPS_SCRIPT_URL + '?action=getEvents');
+    const data = await res.json();
+    bookedRanges = data.events.map(e => ({
+      start: new Date(e.start),
+      end:   new Date(e.end)
+    }));
+    renderCal();
+  } catch(err) {
+    console.warn('Could not load calendar events:', err);
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// SUBMIT BOOKING
+// ═══════════════════════════════════════════════════════
+async function submitBooking() {
+  const name   = document.getElementById('fname').value.trim();
+  const email  = document.getElementById('femail').value.trim();
+  const adults = document.getElementById('fadults').value;
+  const kids   = document.getElementById('fkids').value;
+  const notes  = document.getElementById('fnotes').value.trim();
+
+  if(!name)  { alert('What name should we put in the log?'); return; }
+  if(!email) { alert('We need an email to send your confirmation!'); return; }
+  if(!startDate || !endDate) { alert('Please select your arrival and departure dates.'); return; }
+
+  const fmt = d => d.toLocaleDateString('en-US',{weekday:'short',month:'long',day:'numeric',year:'numeric'});
+  const nights = Math.round((endDate - startDate) / 86400000);
+
+  if(APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_URL_HERE') {
+    // Demo mode — show confirmation without actual API call
+    showConfirmation(name, fmt(startDate), fmt(endDate), nights, adults, kids);
+    return;
+  }
+
+  const overlay = document.getElementById('loadingOverlay');
+  overlay.classList.add('visible');
+
+  try {
+    const payload = {
+      action: 'createEvent',
+      name, email, adults, kids, notes,
+      start: startDate.toISOString(),
+      end:   endDate.toISOString(),
+      nights
+    };
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if(data.status === 'ok') {
+      showConfirmation(name, fmt(startDate), fmt(endDate), nights, adults, kids);
+    } else {
+      alert('Something went sideways on our end. Try again or shoot us a text!');
+    }
+  } catch(err) {
+    alert('Connection trouble. Check your internet and try again.');
+    console.error(err);
+  } finally {
+    overlay.classList.remove('visible');
+  }
+}
+
+function showConfirmation(name, start, end, nights, adults, kids) {
+  document.getElementById('bookingForm').style.display = 'none';
+  const conf = document.getElementById('confirmation');
+  conf.classList.add('visible');
+  document.getElementById('confirmText').textContent =
+    `The expedition log has been updated, ${name.split(' ')[0]}. A confirmation is on its way to your email. See you out there!`;
+  document.getElementById('confirmDetails').innerHTML =
+    `Arriving: ${start}<br/>Departing: ${end}<br/>${nights} night${nights!==1?'s':''} &middot; ${adults} adult${adults!==1?'s':''} &middot; ${kids} kid${kids!==1?'s':''}`;
+}
+</script>
+</body>
+</html>
