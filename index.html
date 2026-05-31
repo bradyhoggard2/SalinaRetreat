@@ -53,8 +53,8 @@
     justify-content: center;
     overflow: hidden;
     background:
-  linear-gradient(to bottom, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0.75) 100%),
-  var(--parchment-dark);
+      linear-gradient(to bottom, rgba(43,29,14,0.55) 0%, rgba(43,29,14,0.2) 40%, rgba(43,29,14,0.75) 100%),
+      var(--parchment-dark);
   }
 
   /* Photo placeholder - swap src for real photo */
@@ -71,7 +71,21 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 0.75;
+    opacity: 1;
+  }
+
+  /* Dark overlay on top of photo for text readability */
+  .cover-photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.6) 0%,
+      rgba(0,0,0,0.35) 40%,
+      rgba(0,0,0,0.65) 100%
+    );
+    z-index: 1;
   }
 
   /* Decorative border frame */
@@ -668,7 +682,6 @@
 <section id="cover">
   <div class="cover-photo">
     <!-- Replace this div with: <img src="YOUR_PHOTO.jpg" alt="Salina Retreat" /> -->
-<img src="https://raw.githubusercontent.com/bradyhoggard2/SalinaRetreat/main/SalinaRetreatImage.jpg" alt="Salina Retreat" />
   </div>
 
   <!-- Decorative frame -->
