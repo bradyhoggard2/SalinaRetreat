@@ -1070,7 +1070,7 @@ function rangeHasBooking(s, e) {
 }
 
 function isDateBooked(date) {
-  return bookedRanges.some(r => date >= r.start && date < r.end);
+  return bookedRanges.some(r => date >= r.start && date <= r.end);
 }
 
 function updateDateDisplay() {
