@@ -663,7 +663,6 @@
 <!-- Loading overlay -->
 <div id="loadingOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(43,29,14,0.88); z-index:99999; flex-direction:column; align-items:center; justify-content:center; gap:1rem; text-align:center;">
   <div class="loading-spinner"></div>
-  <p class="loading-text">Checking the expedition log...</p>
 </div>
 
 <!-- ══ COVER PAGE ══ -->
@@ -895,6 +894,7 @@ function resetBooking() {
   document.getElementById('fkids').value = 0;
   document.getElementById('fnotes').value = '';
   renderCal();
+  fetchBookedDates();
 }
 
 // ═══════════════════════════════════════════════════════
