@@ -61,31 +61,28 @@
   .cover-photo {
     position: absolute;
     inset: 0;
-    background:
-      linear-gradient(160deg, #3b2409 0%, #6b4220 35%, #8b6030 60%, #3b2409 100%);
     z-index: 0;
+    background: #2b1d0e;
   }
 
-  /* If a real photo is used, this class overrides the bg */
   .cover-photo img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 1;
+    display: block;
   }
 
-  /* Dark overlay on top of photo for text readability */
-  .cover-photo::after {
-    content: '';
+  /* Dark gradient overlay for text readability */
+  .cover-overlay {
     position: absolute;
     inset: 0;
+    z-index: 1;
     background: linear-gradient(
       to bottom,
       rgba(0,0,0,0.6) 0%,
-      rgba(0,0,0,0.35) 40%,
-      rgba(0,0,0,0.65) 100%
+      rgba(0,0,0,0.3) 40%,
+      rgba(0,0,0,0.7) 100%
     );
-    z-index: 1;
   }
 
   /* Decorative border frame */
@@ -681,8 +678,9 @@
 <!-- ══ COVER PAGE ══ -->
 <section id="cover">
   <div class="cover-photo">
-    <!-- Replace this div with: <img src="YOUR_PHOTO.jpg" alt="Salina Retreat" /> -->
+    <img src="https://raw.githubusercontent.com/bradyhoggard2/SalinaRetreat/main/SalinaRetreatImage.jpg" alt="Salina Retreat" />
   </div>
+  <div class="cover-overlay"></div>
 
   <!-- Decorative frame -->
   <div class="cover-frame"></div>
