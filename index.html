@@ -617,9 +617,11 @@
 
   /* Loading state */
   .loading-overlay {
-    position: fixed; inset: 0;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
     background: rgba(43,29,14,0.85);
-    z-index: 999;
+    z-index: 99999;
     display: none;
     flex-direction: column;
     align-items: center; justify-content: center;
