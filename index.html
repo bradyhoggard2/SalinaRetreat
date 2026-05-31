@@ -757,6 +757,9 @@
                 <span class="cal-month-label" id="monthLabel"></span>
                 <button class="cal-nav-btn" id="nextMonth">&#8250;</button>
               </div>
+              <div style="text-align:right; margin-bottom:6px;">
+                <button id="todayBtn" onclick="goToToday()" style="background:none;border:none;font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faded);cursor:pointer;text-decoration:underline;padding:0;">Today</button>
+              </div>
 
               <div class="cal-grid" id="calGrid">
                 <div class="cal-dow">Su</div>
@@ -808,11 +811,16 @@
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="fadults">Adults</label>
-                  <input class="form-input" id="fadults" type="number" min="1" max="20" value="2" onfocus="this.select()" />
+                  <input class="form-input" id="fadults" type="number" min="1" max="12" value="2" onfocus="this.select()" oninput="checkGuestLimit()" />
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="fkids">Kids</label>
-                  <input class="form-input" id="fkids" type="number" min="0" max="20" value="0" onfocus="this.select()" />
+                  <input class="form-input" id="fkids" type="number" min="0" max="12" value="0" onfocus="this.select()" oninput="checkGuestLimit()" />
+                </div>
+                <div class="form-group full" id="guestWarning" style="display:none;">
+                  <p style="font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:0.08em;color:var(--stamp-red);border:1px solid var(--stamp-red);padding:8px 12px;margin:0;">
+                    Adventurers are limited to 12 guests max.
+                  </p>
                 </div>
                 <div class="form-group full">
                   <label class="form-label" for="fnotes">Notes for the Host (optional)</label>
@@ -930,7 +938,8 @@ function renderCal() {
     el.className = 'cal-cell';
     el.textContent = d;
 
-    const isPast   = date < today;
+    const maxDate  = new Date(today); maxDate.setMonth(maxDate.getMonth() + 12);
+    const isPast   = date < today || date > maxDate;
     const isBooked = isDateBooked(date);
     const isToday  = date.getTime() === today.getTime();
     const isStart  = startDate && date.getTime() === startDate.getTime();
@@ -953,19 +962,45 @@ function renderCal() {
 }
 
 function handleDayClick(date) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const maxDate = new Date(today); maxDate.setMonth(maxDate.getMonth() + 12);
+
+  // Block dates beyond 12-month window
+  if(date > maxDate) {
+    showCalNotice('Bookings are limited to 12 months in advance.');
+    return;
+  }
+
+  // If clicking the already-selected start date, deselect it
+  if(startDate && date.getTime() === startDate.getTime()) {
+    startDate = null;
+    endDate   = null;
+    selecting = 'start';
+    updateDateDisplay();
+    renderCal();
+    return;
+  }
+
   if(selecting === 'start') {
     startDate = date;
     endDate   = null;
     selecting = 'end';
   } else {
+    // Clicking any date while choosing end resets to new start
     if(date <= startDate) {
       startDate = date;
       endDate   = null;
       selecting = 'end';
     } else {
+      // Check 7-day limit
+      const nights = Math.round((date - startDate) / 86400000);
+      if(nights > 7) {
+        showCalNotice('Adventurers are limited to 7 days per adventure booking.');
+        return;
+      }
       // Check no booked dates in range
       if(rangeHasBooking(startDate, date)) {
-        alert('Those dates overlap with an existing reservation. Please choose different dates!');
+        showCalNotice('Those dates overlap with an existing reservation. Please choose different dates!');
         return;
       }
       endDate   = date;
@@ -973,6 +1008,37 @@ function handleDayClick(date) {
     }
   }
   updateDateDisplay();
+  renderCal();
+}
+
+function showCalNotice(msg) {
+  let notice = document.getElementById('calNotice');
+  if(!notice) {
+    notice = document.createElement('p');
+    notice.id = 'calNotice';
+    notice.style.cssText = "font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.08em;color:var(--stamp-red);border:1px solid var(--stamp-red);padding:7px 10px;margin-top:8px;";
+    document.getElementById('calGrid').parentNode.appendChild(notice);
+  }
+  notice.textContent = msg;
+  notice.style.display = 'block';
+  clearTimeout(notice._timer);
+  notice._timer = setTimeout(() => { notice.style.display = 'none'; }, 4000);
+}
+
+function checkGuestLimit() {
+  const adults = parseInt(document.getElementById('fadults').value) || 0;
+  const kids   = parseInt(document.getElementById('fkids').value) || 0;
+  const warn   = document.getElementById('guestWarning');
+  if(adults + kids > 12) {
+    warn.style.display = 'block';
+  } else {
+    warn.style.display = 'none';
+  }
+}
+
+function goToToday() {
+  viewDate = new Date();
+  viewDate.setDate(1);
   renderCal();
 }
 
@@ -1035,6 +1101,8 @@ async function submitBooking() {
   const kids   = document.getElementById('fkids').value;
   const notes  = document.getElementById('fnotes').value.trim();
 
+  const totalGuests = parseInt(adults) + parseInt(kids);
+  if(totalGuests > 12) { alert('Adventurers are limited to 12 guests max.'); return; }
   if(!name)  { alert('What name should we put in the log?'); return; }
   if(!email) { alert('We need an email to send your confirmation!'); return; }
   if(!startDate || !endDate) { alert('Please select your arrival and departure dates.'); return; }
