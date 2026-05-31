@@ -1139,13 +1139,14 @@ async function submitBooking() {
   const nights = Math.round((endDate - startDate) / 86400000);
 
   if(APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_URL_HERE') {
-    // Demo mode — show confirmation without actual API call
+    bookedRanges.push({ start: new Date(startDate), end: new Date(endDate) });
     showConfirmation(name, fmt(startDate), fmt(endDate), nights, adults, kids);
     return;
   }
 
   const overlay = document.getElementById('loadingOverlay');
-  overlay.style.display = 'flex';
+  document.body.appendChild(overlay);
+  overlay.style.cssText = 'display:flex; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(43,29,14,0.88); z-index:99999; flex-direction:column; align-items:center; justify-content:center; gap:1rem; text-align:center;';
 
   try {
     const payload = {
@@ -1161,6 +1162,7 @@ async function submitBooking() {
     });
     const data = await res.json();
     if(data.status === 'ok') {
+      bookedRanges.push({ start: new Date(startDate), end: new Date(endDate) });
       showConfirmation(name, fmt(startDate), fmt(endDate), nights, adults, kids);
     } else {
       alert('Something went sideways on our end. Try again or shoot us a text!');
