@@ -811,15 +811,15 @@
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="fadults">Adults</label>
-                  <input class="form-input" id="fadults" type="number" min="1" max="12" value="2" onfocus="this.select()" oninput="checkGuestLimit()" />
+                  <input class="form-input" id="fadults" type="number" min="1" max="20" value="2" onfocus="this.select()" oninput="checkGuestLimit()" />
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="fkids">Kids</label>
-                  <input class="form-input" id="fkids" type="number" min="0" max="12" value="0" onfocus="this.select()" oninput="checkGuestLimit()" />
+                  <input class="form-input" id="fkids" type="number" min="0" max="20" value="0" onfocus="this.select()" oninput="checkGuestLimit()" />
                 </div>
                 <div class="form-group full" id="guestWarning" style="display:none;">
                   <p style="font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:0.08em;color:var(--stamp-red);border:1px solid var(--stamp-red);padding:8px 12px;margin:0;">
-                    Adventurers are limited to 12 guests max.
+                    Adventurers are limited to 20 guests max.
                   </p>
                 </div>
                 <div class="form-group full">
@@ -907,9 +907,31 @@ function initCalendar() {
   const freshNext = nextBtn.cloneNode(true);
   prevBtn.parentNode.replaceChild(freshPrev, prevBtn);
   nextBtn.parentNode.replaceChild(freshNext, nextBtn);
-  freshPrev.addEventListener('click', () => { viewDate.setMonth(viewDate.getMonth()-1); renderCal(); });
-  freshNext.addEventListener('click', () => { viewDate.setMonth(viewDate.getMonth()+1); renderCal(); });
+  freshPrev.addEventListener('click', () => {
+    viewDate.setMonth(viewDate.getMonth()-1);
+    renderCal();
+    updateNavButtons();
+  });
+  freshNext.addEventListener('click', () => {
+    const maxView = new Date(); maxView.setMonth(maxView.getMonth() + 12);
+    if(viewDate.getFullYear() === maxView.getFullYear() && viewDate.getMonth() === maxView.getMonth()) return;
+    viewDate.setMonth(viewDate.getMonth()+1);
+    renderCal();
+    updateNavButtons();
+  });
   renderCal();
+  updateNavButtons();
+}
+
+function updateNavButtons() {
+  const today  = new Date();
+  const maxView = new Date(); maxView.setMonth(maxView.getMonth() + 12);
+  const atMax  = viewDate.getFullYear() === maxView.getFullYear() && viewDate.getMonth() === maxView.getMonth();
+  const atMin  = viewDate.getFullYear() === today.getFullYear() && viewDate.getMonth() === today.getMonth();
+  const nextBtn = document.getElementById('nextMonth');
+  const prevBtn = document.getElementById('prevMonth');
+  if(nextBtn) { nextBtn.disabled = atMax; nextBtn.style.opacity = atMax ? '0.3' : '1'; }
+  if(prevBtn) { prevBtn.disabled = atMin; prevBtn.style.opacity = atMin ? '0.3' : '1'; }
 }
 
 function renderCal() {
@@ -1029,7 +1051,7 @@ function checkGuestLimit() {
   const adults = parseInt(document.getElementById('fadults').value) || 0;
   const kids   = parseInt(document.getElementById('fkids').value) || 0;
   const warn   = document.getElementById('guestWarning');
-  if(adults + kids > 12) {
+  if(adults + kids > 20) {
     warn.style.display = 'block';
   } else {
     warn.style.display = 'none';
@@ -1040,6 +1062,7 @@ function goToToday() {
   viewDate = new Date();
   viewDate.setDate(1);
   renderCal();
+  updateNavButtons();
 }
 
 function rangeHasBooking(s, e) {
@@ -1102,7 +1125,7 @@ async function submitBooking() {
   const notes  = document.getElementById('fnotes').value.trim();
 
   const totalGuests = parseInt(adults) + parseInt(kids);
-  if(totalGuests > 12) { alert('Adventurers are limited to 12 guests max.'); return; }
+  if(totalGuests > 20) { alert('Adventurers are limited to 20 guests max.'); return; }
   if(!name)  { alert('What name should we put in the log?'); return; }
   if(!email) { alert('We need an email to send your confirmation!'); return; }
   if(!startDate || !endDate) { alert('Please select your arrival and departure dates.'); return; }
