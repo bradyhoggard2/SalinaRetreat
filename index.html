@@ -636,6 +636,9 @@
     color: var(--gold-light);
     text-transform: uppercase;
     animation: pulse 1.5s ease infinite;
+    width: 100%;
+    text-align: center;
+    margin: 0;
   }
   .loading-spinner {
     width: 36px; height: 36px;
@@ -658,7 +661,7 @@
 <body>
 
 <!-- Loading overlay -->
-<div class="loading-overlay" id="loadingOverlay">
+<div id="loadingOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(43,29,14,0.88); z-index:99999; flex-direction:column; align-items:center; justify-content:center; gap:1rem; text-align:center;">
   <div class="loading-spinner"></div>
   <p class="loading-text">Checking the expedition log...</p>
 </div>
@@ -1142,7 +1145,7 @@ async function submitBooking() {
   }
 
   const overlay = document.getElementById('loadingOverlay');
-  overlay.classList.add('visible');
+  overlay.style.display = 'flex';
 
   try {
     const payload = {
@@ -1166,7 +1169,7 @@ async function submitBooking() {
     alert('Connection trouble. Check your internet and try again.');
     console.error(err);
   } finally {
-    overlay.classList.remove('visible');
+    overlay.style.display = 'none';
   }
 }
 
